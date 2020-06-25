@@ -1,4 +1,3 @@
-using Contracts;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +9,7 @@ namespace Repository
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         protected RepositoryContext RepositoryContext { get; set; } 
+
         public RepositoryBase(RepositoryContext repositoryContext) 
         {
             RepositoryContext = repositoryContext; 

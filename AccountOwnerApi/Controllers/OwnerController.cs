@@ -1,26 +1,23 @@
-using Contracts;
-using Microsoft.AspNetCore.Mvc;
 using System;
-using AutoMapper;
-using System.Collections.Generic;
+using BusinessLogic;
 using Entities.DataTransferObjects;
-using Entities.Models;
- 
-namespace AccountOwnerServer.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+namespace AccountOwnerApi.Controllers
 {
     [Route("api/owner")]
     [ApiController]
     public class OwnerController : ControllerBase
     {
-        private ILoggerManager _logger;
-        private IRepositoryWrapper _repository;
-        private IMapper _mapper;
- 
-        public OwnerController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper)
+	    private readonly ILogger<OwnerController> _logger;
+
+	    private readonly IOwnerService _ownerService;
+
+	    public OwnerController(ILogger<OwnerController> logger, IOwnerService ownerService)
         {
-            _logger = logger;
-            _repository = repository;
-            _mapper = mapper;
+	        _logger = logger;
+	        _ownerService = ownerService;
         }
  
         [HttpGet]
@@ -28,12 +25,10 @@ namespace AccountOwnerServer.Controllers
         {
             try
             {
-                var owners = _repository.Owner.GetAllOwners();
+                var owners = _ownerService.GetAllOwners();
  
-                _logger.LogInfo($"Returned all owners from database.");
-                var ownersResult = _mapper.Map<IEnumerable<OwnerDto>>(owners);
- 
-                return Ok(ownersResult);
+                _logger.LogInformation($"Returned all owners from database.");
+                return Ok(owners);
             }
             catch (Exception ex)
             {
@@ -47,7 +42,7 @@ namespace AccountOwnerServer.Controllers
         {
             try
             {
-                var owner = _repository.Owner.GetOwnerById(id);
+                var owner = _ownerService.GetOwnerById(id);
         
                 if (owner == null)
                 {
@@ -56,10 +51,9 @@ namespace AccountOwnerServer.Controllers
                 }
                 else
                 {
-                _logger.LogInfo($"Returned owner with id: {id}");
-        
-                var ownerResult = _mapper.Map<OwnerDto>(owner);
-                return Ok(ownerResult); 
+                _logger.LogInformation($"Returned owner with id: {id}");
+                
+                return Ok(owner); 
                 }
             }
             catch (Exception ex)
@@ -75,7 +69,7 @@ namespace AccountOwnerServer.Controllers
         {
             try
             {
-                var owner = _repository.Owner.GetOwnerWithDetails(id);
+                var owner = _ownerService.GetOwnerWithDetails(id);
         
                 if (owner == null)
                 {
@@ -84,10 +78,8 @@ namespace AccountOwnerServer.Controllers
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned owner with details for id: {id}");
-                    
-                    var ownerResult = _mapper.Map<OwnerDto>(owner);
-                    return Ok(ownerResult);
+                    _logger.LogInformation($"Returned owner with details for id: {id}");
+                    return Ok(owner);
                 }
             }
             catch (Exception ex)
@@ -114,14 +106,9 @@ namespace AccountOwnerServer.Controllers
                     _logger.LogError("Invalid owner object sent from client.");
                     return BadRequest("Invalid model object");
                 }
-        
-                var ownerEntity = _mapper.Map<Owner>(owner);
-        
-                _repository.Owner.CreateOwner(ownerEntity);
-                _repository.Save();
-        
-                var createdOwner = _mapper.Map<OwnerDto>(ownerEntity);
-        
+                
+                var createdOwner = _ownerService.CreateOwner(owner);
+
                 return CreatedAtRoute("OwnerById", new { id = createdOwner.Id }, createdOwner);
             }
             catch (Exception ex)
@@ -148,19 +135,9 @@ namespace AccountOwnerServer.Controllers
                     _logger.LogError("Invalid owner object sent from client.");
                     return BadRequest("Invalid model object");
                 }
-        
-                var ownerEntity = _repository.Owner.GetOwnerById(id);
-                if (ownerEntity == null)
-                {
-                    _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-        
-                _mapper.Map(owner, ownerEntity);
-        
-                _repository.Owner.UpdateOwner(ownerEntity);
-                _repository.Save();
-        
+
+                _ownerService.UpdateOwner(id, owner);
+
                 return NoContent();
             }
             catch (Exception ex)
@@ -175,16 +152,15 @@ namespace AccountOwnerServer.Controllers
         {
             try
             {
-                var owner = _repository.Owner.GetOwnerById(id);
+                var owner = _ownerService.GetOwnerById(id);
                 if(owner == null)
                 {
                     _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
         
-                _repository.Owner.DeleteOwner(owner);
-                        _repository.Save();
-        
+                _ownerService.DeleteOwner(owner);
+
                 return NoContent();
             }
             catch (Exception ex)

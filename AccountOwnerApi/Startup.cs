@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AccountOwnerApi.Extensions;
-using NLog;
 using System.IO;
 using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
@@ -17,9 +16,7 @@ namespace AccountOwnerApi
     {
         public Startup(IConfiguration configuration)
         {
-            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-
-            Configuration = configuration;
+	        Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -29,12 +26,8 @@ namespace AccountOwnerApi
         {
             services.ConfigureCors();
             services.ConfigureIISIntegration();
-            
-            services.ConfigureLoggerService();
-
-            	
+        
             services.ConfigureMySqlContext(Configuration);
-            services.ConfigureRepositoryWrapper();
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
