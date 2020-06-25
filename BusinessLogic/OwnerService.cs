@@ -57,6 +57,13 @@ namespace BusinessLogic
 			ValidateUserInput(owner);
 
 			var ownerEntity = _mapper.Map<Owner>(owner);
+			//var ownerEntity = new Owner()
+			//{
+			//	Address = owner.Address,
+			//	DateOfBirth = owner.DateOfBirth,
+			//	Id = Guid.NewGuid(),
+			//	Accounts = new List<Account>()
+			//};
 
 			_ownerRepository.CreateOwner(ownerEntity);
 			return _mapper.Map<OwnerDto>(owner);
