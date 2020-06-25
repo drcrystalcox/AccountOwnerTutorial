@@ -1,0 +1,4 @@
+2020-06-25 10:55:52.6357 INFO Returned all owners from database.
+2020-06-25 10:56:05.0372 INFO Returned all owners from database.
+2020-06-25 10:56:05.1915 INFO Returned all owners from database.
+2020-06-25 10:56:45.6334 INFO Returned all owners from database.
