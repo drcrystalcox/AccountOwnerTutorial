@@ -33,7 +33,7 @@ namespace BusinessLogic
 			return _mapper.Map<IEnumerable<OwnerDto>>(results);
 		}
 
-		public OwnerDto GetOwnerById(Guid ownerId)
+		public OwnerDto GetOwnerDtoById(Guid ownerId)
 		{
 			if (ownerId == Guid.Empty)
 			{
@@ -42,6 +42,17 @@ namespace BusinessLogic
 
 			var result = _ownerRepository.FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
 			return _mapper.Map<OwnerDto>(result);
+		}
+
+		public Owner GetOwnerById(Guid ownerId)
+		{
+			if (ownerId == Guid.Empty)
+			{
+				throw new ArgumentOutOfRangeException("The owner id may not be an empty guid.");
+			}
+
+			var result = _ownerRepository.FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
+			return result;
 		}
 
 		public OwnerDto GetOwnerWithDetails(Guid ownerId)
@@ -66,7 +77,7 @@ namespace BusinessLogic
 			//};
 
 			_ownerRepository.CreateOwner(ownerEntity);
-			return _mapper.Map<OwnerDto>(owner);
+			return _mapper.Map<OwnerDto>(ownerEntity);
 		}
 
 		private void ValidateUserInput(OwnerForCreationDto owner)
@@ -98,15 +109,13 @@ namespace BusinessLogic
 				// TODO: need to return notfound to the user
 			}
 
-			var ownerToUpdate = _mapper.Map<Owner>(owner);
-			_ownerRepository.UpdateOwner(ownerToUpdate);
+			_mapper.Map(owner, ownerEntity);
+			_ownerRepository.UpdateOwner(ownerEntity);
 		}
 
-		public void DeleteOwner(OwnerDto owner)
+		public void DeleteOwner(Owner owner)
 		{
-			// TODO: Want to try to find the owner first before updating. Throw error if the owner does not exist.
-			var ownerEntity = _mapper.Map<Owner>(owner);
-			_ownerRepository.DeleteOwner(ownerEntity);
+			_ownerRepository.DeleteOwner(owner);
 		}
     }
 }
