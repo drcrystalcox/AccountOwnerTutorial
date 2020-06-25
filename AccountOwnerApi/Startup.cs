@@ -14,7 +14,6 @@ using Repository;
 
 namespace AccountOwnerApi
 {
-    //test
     public class Startup
     {
         public Startup(IConfiguration configuration)
