@@ -22,6 +22,7 @@ namespace AccountOwnerApi.Extensions {
                     builder => builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader());
+                    
             });
         }
 
