@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Entities.DataTransferObjects;
+using Entities.Models;
 
 namespace BusinessLogic
 {
@@ -8,7 +9,9 @@ namespace BusinessLogic
 	{
 		IEnumerable<OwnerDto> GetAllOwners();
 
-		OwnerDto GetOwnerById(Guid ownerId);
+		OwnerDto GetOwnerDtoById(Guid ownerId);
+		
+		Owner GetOwnerById(Guid ownerId);
 
 		OwnerDto GetOwnerWithDetails(Guid ownerId);
 
@@ -16,6 +19,6 @@ namespace BusinessLogic
 
 		void UpdateOwner(Guid id, OwnerForUpdateDto owner);
 
-		void DeleteOwner(OwnerDto owner);
+		void DeleteOwner(Owner owner);
 	}
 }
