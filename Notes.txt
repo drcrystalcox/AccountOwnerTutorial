@@ -1,0 +1,127 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Try the new cross-platform PowerShell https://aka.ms/pscore6
+
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git init
+Initialized empty Git repository in C:/Users/crystal/source/repos/AccountOwnerServer/.git/
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git remote add acctowner https://github.com/drcrystalcox/AccountOwnerTutorial.git
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git commit -a -m "Initial commit"
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+        .vscode/
+        AccountOwnerServer.sln
+        Contracts/
+        DBTest/
+        Entities/
+        LoggerService/
+        Repository/
+        internal_logs/
+        logs/
+
+nothing added to commit but untracked files present (use "git add" to track)
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git add *
+warning: LF will be replaced by CRLF in .vscode/tasks.json.
+warning: LF will be replaced by CRLF in AccountOwnerApi/.vscode/launch.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in AccountOwnerApi/.vscode/tasks.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in AccountOwnerApi/appsettings.Development.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in DBTest/.vscode/launch.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in DBTest/.vscode/tasks.json.
+The file will have its original line endings in your working directory
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git commit -m "Initial commit"
+[master (root-commit) fe66ed8] Initial commit
+ 49 files changed, 4072 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 .vscode/launch.json
+ create mode 100644 .vscode/tasks.json
+ create mode 100644 AccountOwnerApi/.vscode/launch.json
+ create mode 100644 AccountOwnerApi/.vscode/tasks.json
+ create mode 100644 AccountOwnerApi/AccountOwnerApi.csproj
+ create mode 100644 AccountOwnerApi/Controllers/OwnerController.cs
+ create mode 100644 AccountOwnerApi/Controllers/WeatherForecastController.cs
+ create mode 100644 AccountOwnerApi/Extensions/ServiceExtensions.cs
+ create mode 100644 AccountOwnerApi/MappingProfile.cs
+ create mode 100644 AccountOwnerApi/Program.cs
+ create mode 100644 AccountOwnerApi/Startup.cs
+ create mode 100644 AccountOwnerApi/WeatherForecast.cs
+ create mode 100644 AccountOwnerApi/appsettings.Development.json
+ create mode 100644 AccountOwnerApi/appsettings.json
+ create mode 100644 AccountOwnerApi/nlog.config
+ create mode 100644 AccountOwnerServer.sln
+ create mode 100644 Contracts/Class1.cs
+ create mode 100644 Contracts/Contracts.csproj
+ create mode 100644 Contracts/IAccountRepository.cs
+ create mode 100644 Contracts/ILoggerManager.cs
+ create mode 100644 Contracts/IOwnerRepository.cs
+ create mode 100644 Contracts/IRepositoryBase.cs
+ create mode 100644 Contracts/IRepositoryWrapper.cs
+ create mode 100644 DBTest/.vscode/launch.json
+ create mode 100644 DBTest/.vscode/tasks.json
+ create mode 100644 DBTest/DBTest.csproj
+ create mode 100644 DBTest/Program.cs
+ create mode 100644 Entities/Class1.cs
+ create mode 100644 Entities/DataTransferObjects/AccountDto.cs
+ create mode 100644 Entities/DataTransferObjects/OwnerDto.cs
+ create mode 100644 Entities/DataTransferObjects/OwnerForCreationDto.cs
+ create mode 100644 Entities/DataTransferObjects/OwnerForUpdateDto.cs
+ create mode 100644 Entities/Entities.csproj
+ create mode 100644 Entities/Models/Account.cs
+ create mode 100644 Entities/Models/Owner.cs
+ create mode 100644 Entities/RepositoryContext.cs
+ create mode 100644 LoggerService/Class1.cs
+ create mode 100644 LoggerService/LoggerService.csproj
+ create mode 100644 Repository/AccountRepository.cs
+ create mode 100644 Repository/Class1.cs
+ create mode 100644 Repository/OwnerRepository.cs
+ create mode 100644 Repository/Repository.csproj
+ create mode 100644 Repository/RepositoryBase.cs
+ create mode 100644 Repository/RepositoryWrapper.cs
+ create mode 100644 internal_logs/internallog.txt
+ create mode 100644 logs/2020-06-23_logfile.txt
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git push
+fatal: No configured push destination.
+Either specify the URL from the command-line or configure a remote repository using
+
+    git remote add <name> <url>
+and then push using the remote name
+
+    git push <name>
+
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git push origin/master
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin/master master
+
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git push --set-upstream origin/master master
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git push --set-upstream acctowner/master master
+fatal: 'acctowner/master' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git remote
+acctowner
+PS C:\Users\crystal\source\repos\AccountOwnerServer> git push --set-upstream acctowner master       
+Enumerating objects: 66, done.
+Counting objects: 100% (66/66), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (64/64), done.
+Writing objects: 100% (66/66), 30.17 KiB | 965.00 KiB/s, done.
+Total 66 (delta 10), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (10/10), done.
+To https://github.com/drcrystalcox/AccountOwnerTutorial.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'acctowner'.
+PS C:\Users\crystal\source\repos\AccountOwnerServer> 
