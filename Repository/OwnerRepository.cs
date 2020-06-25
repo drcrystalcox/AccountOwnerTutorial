@@ -1,4 +1,3 @@
-using Contracts;
 using Entities;
 using Entities.Models;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
- 
 namespace Repository
 {
     public class OwnerRepository : RepositoryBase<Owner>, IOwnerRepository
@@ -31,14 +29,17 @@ namespace Repository
 
         public void CreateOwner(Owner owner) {
             Create(owner);
+            RepositoryContext.SaveChanges();
         }
 
         public void UpdateOwner(Owner owner) {
             Update(owner);
+            RepositoryContext.SaveChanges();
         }
 
         public void DeleteOwner(Owner owner) {
             Delete(owner);
+            RepositoryContext.SaveChanges();
         }
 
 
