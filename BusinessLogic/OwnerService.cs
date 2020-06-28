@@ -33,6 +33,26 @@ namespace BusinessLogic
 			return _mapper.Map<IEnumerable<OwnerDto>>(results);
 		}
 
+		public IEnumerable<OwnerDto> GetAllOwnersNoAutoMapper()
+		{
+			var results = _ownerRepository.FindAll().OrderBy(ow => ow.Name).ToList();
+
+			var ownerDtos = results.Select(o => new OwnerDto()
+			{
+				Id = o.Id,
+				Name = o.Name,
+				Address = o.Address,
+				Accounts = o.Accounts.Select(a => new AccountDto()
+				{
+					AccountType = a.AccountType,
+					DateCreated = a.DateCreated,
+					Id = a.Id
+				})
+			});
+
+			return ownerDtos;
+		}
+
 		public OwnerDto GetOwnerDtoById(Guid ownerId)
 		{
 			if (ownerId == Guid.Empty)
