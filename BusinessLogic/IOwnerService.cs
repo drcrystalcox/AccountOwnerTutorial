@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
 	public interface IOwnerService
 	{
-		IEnumerable<OwnerDto> GetAllOwners();
+		 Task<IEnumerable<OwnerDto>> GetAllOwnersAsync();
 
-		OwnerDto GetOwnerDtoById(Guid ownerId);
+		 Task<OwnerDto> GetOwnerDtoByIdAsync(Guid ownerId);
 		
-		Owner GetOwnerById(Guid ownerId);
+		 Task<Owner> GetOwnerByIdAsync(Guid ownerId);
 
-		OwnerDto GetOwnerWithDetails(Guid ownerId);
+		 Task<OwnerDto> GetOwnerWithDetailsAsync(Guid ownerId);
 
-		OwnerDto CreateOwner(OwnerForCreationDto owner);
+		 Task<OwnerDto> CreateOwnerAsync(OwnerForCreationDto owner);
 
-		void UpdateOwner(Guid id, OwnerForUpdateDto owner);
+		 Task UpdateOwnerAsync(Guid id, OwnerForUpdateDto owner);
 
-		void DeleteOwner(Owner owner);
+		 Task DeleteOwnerAsync(Owner owner);
 	}
 }

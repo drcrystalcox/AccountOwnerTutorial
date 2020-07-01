@@ -18,10 +18,11 @@ namespace UnitTests
 	public class OwnerServiceTests
 	{
 		[Fact]
-		public void GetAllOwners_Sorts_Results_By_Name()
+		public async void GetAllOwners_Sorts_Results_By_Name()
 		{
 			// Arrange
 			var mockOwnerRepository = new Mock<IOwnerRepository>();
+			var mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
 
 			var dylan = new Owner()
 			{
@@ -62,8 +63,8 @@ namespace UnitTests
 			).Returns(ownersAsDtos);
 
 			// Act
-			var ownerService = new OwnerService(mockOwnerRepository.Object, mockLogger, mockMapper.Object);
-			var result = ownerService.GetAllOwners();
+			var ownerService = new OwnerService(mockRepositoryWrapper.Object, mockLogger, mockMapper.Object);
+			var result = await ownerService.GetAllOwnersAsync();
 
 			// Assert
 			Assert.Equal(2, result.Count());
@@ -71,10 +72,12 @@ namespace UnitTests
 
 
 		[Fact]
-		public void GetAllOwnersNoAutoMapper_Sorts_Results_By_Name()
+		public async void GetAllOwnersNoAutoMapper_Sorts_Results_By_Name()
 		{
 			// Arrange
 			var mockOwnerRepository = new Mock<IOwnerRepository>();
+						var mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
+
 
 			var dylan = new Owner()
 			{
@@ -105,14 +108,14 @@ namespace UnitTests
 			var mockMapper = new Mock<IMapper>();
 
 			// Act
-			var ownerService = new OwnerService(mockOwnerRepository.Object, mockLogger, mockMapper.Object);
-			var result = ownerService.GetAllOwnersNoAutoMapper().ToList();
+			var ownerService = new OwnerService(mockRepositoryWrapper.Object, mockLogger, mockMapper.Object);
+			var result0 = await ownerService.GetAllOwnersNoAutoMapperAsync();
+			var result =  result0.ToList();
 
 			// Assert
 			Assert.Equal(2, result.Count());
 			Assert.True("Crystal" == result[0].Name);
 			Assert.True("Dylan" == result[1].Name);
-
 		}
 	}
 }

@@ -30,11 +30,17 @@ namespace AccountOwnerApi
             services.ConfigureIISIntegration();
         
             services.ConfigureMySqlContext(Configuration);
+/*  var connectionString = config["mysqlconnection:connectionString"];
+            services.AddDbContext<RepositoryContext>(o => o.UseMySql(connectionString), ServiceLifetime.Singleton);
+        
+*/
+
 
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSingleton<IOwnerService, OwnerService>();
             services.AddSingleton<IOwnerRepository,OwnerRepository>();
+            services.AddSingleton<IRepositoryWrapper,RepositoryWrapper>();
 
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>

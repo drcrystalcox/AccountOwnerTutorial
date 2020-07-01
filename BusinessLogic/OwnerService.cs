@@ -8,34 +8,35 @@ using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Repository;
+using System.Threading.Tasks;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace BusinessLogic
 {
 	public class OwnerService : IOwnerService
 	{
-		private readonly IOwnerRepository _ownerRepository;
+		private readonly IRepositoryWrapper _repositoryWrapper;
 
 		private readonly ILogger<OwnerService> _logger;
 
 		private readonly IMapper _mapper;
 
-		public OwnerService(IOwnerRepository ownerRepository, ILogger<OwnerService> logger, IMapper mapper)
+		public OwnerService(IRepositoryWrapper repoWrapper, ILogger<OwnerService> logger, IMapper mapper)
 		{
-			_ownerRepository = ownerRepository;
+			_repositoryWrapper=repoWrapper;
 			_logger = logger;
 			_mapper = mapper;
 		}
 
-		public IEnumerable<OwnerDto> GetAllOwners()
+		public async Task<IEnumerable<OwnerDto>>  GetAllOwnersAsync()
 		{
-			var results = _ownerRepository.FindAll().OrderBy(ow => ow.Name).ToList();
+			var results = await  _repositoryWrapper.Owner.GetAllOwnersAsync();
 			return _mapper.Map<IEnumerable<OwnerDto>>(results);
 		}
 
-		public IEnumerable<OwnerDto> GetAllOwnersNoAutoMapper()
+		public async Task<IEnumerable<OwnerDto>> GetAllOwnersNoAutoMapperAsync()
 		{
-			var results = _ownerRepository.FindAll().OrderBy(ow => ow.Name).ToList();
+			var results = await _repositoryWrapper.Owner.GetAllOwnersAsync();
 
 			var ownerDtos = results.Select(o => new OwnerDto()
 			{
@@ -53,35 +54,37 @@ namespace BusinessLogic
 			return ownerDtos;
 		}
 
-		public OwnerDto GetOwnerDtoById(Guid ownerId)
+		public async Task<OwnerDto> GetOwnerDtoByIdAsync(Guid ownerId)
 		{
 			if (ownerId == Guid.Empty)
 			{
 				throw new ArgumentOutOfRangeException("The owner id may not be an empty guid.");
 			}
 
-			var result = _ownerRepository.FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
+			var result =  await _repositoryWrapper.Owner.GetOwnerByIdAsync(ownerId);
+			//FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
 			return _mapper.Map<OwnerDto>(result);
 		}
 
-		public Owner GetOwnerById(Guid ownerId)
+		public async Task<Owner> GetOwnerByIdAsync(Guid ownerId)
 		{
 			if (ownerId == Guid.Empty)
 			{
 				throw new ArgumentOutOfRangeException("The owner id may not be an empty guid.");
 			}
 
-			var result = _ownerRepository.FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
+			var result =  await _repositoryWrapper.Owner.GetOwnerByIdAsync(ownerId);
+			//.FindByCondition(owner => owner.Id.Equals(ownerId)).FirstOrDefault();
 			return result;
 		}
 
-		public OwnerDto GetOwnerWithDetails(Guid ownerId)
+		public async Task<OwnerDto> GetOwnerWithDetailsAsync(Guid ownerId)
 		{
-			var result =  _ownerRepository.FindByCondition(owner => owner.Id.Equals(ownerId)).Include(ac => ac.Accounts).FirstOrDefault();
+			var result = await  _repositoryWrapper.Owner.GetOwnerWithDetailsAsync(ownerId) ;
 			return _mapper.Map<OwnerDto>(result);
 		}
 
-		public OwnerDto CreateOwner(OwnerForCreationDto owner)
+		public async Task<OwnerDto> CreateOwnerAsync(OwnerForCreationDto owner)
 		{
 			// TODO Really, we could return a data structure IValidationResult<T>, where T is OwnerDto, that contains a list of valid errors and an OwnerDto "result" object
 			// Just logging the validation errors at the moment.
@@ -96,7 +99,7 @@ namespace BusinessLogic
 			//	Accounts = new List<Account>()
 			//};
 
-			_ownerRepository.CreateOwner(ownerEntity);
+			await _repositoryWrapper.Owner.CreateOwnerAsync(ownerEntity);
 			return _mapper.Map<OwnerDto>(ownerEntity);
 		}
 
@@ -117,11 +120,11 @@ namespace BusinessLogic
 			}
 		}
 
-		public void UpdateOwner(Guid id, OwnerForUpdateDto owner)
+		public async Task UpdateOwnerAsync(Guid id, OwnerForUpdateDto owner)
 		{
 			// Want to try to find the owner first before updating. Throw error if the owner does not exist.
 			// What if the user attempts to modify the id field for the owner? Throw error. 
-			var ownerEntity = GetOwnerById(id);
+			var ownerEntity = await GetOwnerByIdAsync(id);
 			if (ownerEntity == null)
 			{
 				_logger.LogError($"Owner with id: {id}, hasn't been found in db.");
@@ -130,12 +133,12 @@ namespace BusinessLogic
 			}
 
 			_mapper.Map(owner, ownerEntity);
-			_ownerRepository.UpdateOwner(ownerEntity);
+			 await _repositoryWrapper.Owner.UpdateOwnerAsync(ownerEntity);
 		}
 
-		public void DeleteOwner(Owner owner)
+		public async Task DeleteOwnerAsync(Owner owner)
 		{
-			_ownerRepository.DeleteOwner(owner);
+			 await _repositoryWrapper.Owner.DeleteOwnerAsync(owner);
 		}
     }
 }
