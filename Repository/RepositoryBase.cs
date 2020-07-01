@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -15,14 +16,14 @@ namespace Repository
             RepositoryContext = repositoryContext; 
         } 
         
-        public IQueryable<T> FindAll() 
+        public  IQueryable<T> FindAll() 
         { 
-            return RepositoryContext.Set<T>().AsNoTracking(); 
+            return  RepositoryContext.Set<T>().AsNoTracking(); 
         } 
         
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         { 
-            return RepositoryContext.Set<T>().Where(expression).AsNoTracking();
+            return  RepositoryContext.Set<T>().Where(expression).AsNoTracking();
         } 
         
         public void Create(T entity) 

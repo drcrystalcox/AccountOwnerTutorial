@@ -3,6 +3,7 @@ using BusinessLogic;
 using Entities.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace AccountOwnerApi.Controllers
 {
@@ -21,11 +22,11 @@ namespace AccountOwnerApi.Controllers
         }
  
         [HttpGet]
-        public IActionResult GetAllOwners()
+        public async Task<IActionResult> GetAllOwners()
         {
             try
             {
-                var owners = _ownerService.GetAllOwners();
+                var owners = await _ownerService.GetAllOwnersAsync();
  
                 _logger.LogInformation($"Returned all owners from database.");
                 return Ok(owners);
@@ -38,11 +39,11 @@ namespace AccountOwnerApi.Controllers
         }
 
         [HttpGet("{id}", Name="OwnerById")]
-        public IActionResult GetOwnerById(Guid id)
+        public async Task<IActionResult> GetOwnerById(Guid id)
         {
             try
             {
-                var owner = _ownerService.GetOwnerById(id);
+                var owner = await _ownerService.GetOwnerByIdAsync(id);
         
                 if (owner == null)
                 {
@@ -65,11 +66,11 @@ namespace AccountOwnerApi.Controllers
 
 
         [HttpGet("{id}/account")]
-        public IActionResult GetOwnerWithDetails(Guid id)
+        public async Task<IActionResult> GetOwnerWithDetails(Guid id)
         {
             try
             {
-                var owner = _ownerService.GetOwnerWithDetails(id);
+                var owner = await _ownerService.GetOwnerWithDetailsAsync(id);
         
                 if (owner == null)
                 {
@@ -91,7 +92,7 @@ namespace AccountOwnerApi.Controllers
 
 
         [HttpPost]
-        public IActionResult CreateOwner([FromBody]OwnerForCreationDto owner)
+        public async Task<IActionResult> CreateOwner([FromBody]OwnerForCreationDto owner)
         {
             try
             {
@@ -107,7 +108,7 @@ namespace AccountOwnerApi.Controllers
                     return BadRequest("Invalid model object");
                 }
                 
-                var createdOwner = _ownerService.CreateOwner(owner);
+                var createdOwner = await _ownerService.CreateOwnerAsync(owner);
 
                 return CreatedAtRoute("OwnerById", new { id = createdOwner.Id }, createdOwner);
             }
@@ -120,7 +121,7 @@ namespace AccountOwnerApi.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult UpdateOwner(Guid id, [FromBody]OwnerForUpdateDto owner)
+        public async Task<IActionResult> UpdateOwner(Guid id, [FromBody]OwnerForUpdateDto owner)
         {
             try
             {
@@ -136,7 +137,7 @@ namespace AccountOwnerApi.Controllers
                     return BadRequest("Invalid model object");
                 }
 
-                _ownerService.UpdateOwner(id, owner);
+               await _ownerService.UpdateOwnerAsync(id, owner);
 
                 return NoContent();
             }
@@ -148,18 +149,18 @@ namespace AccountOwnerApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteOwner(Guid id)
+        public async Task<IActionResult> DeleteOwner(Guid id)
         {
             try
             {
-                var owner = _ownerService.GetOwnerById(id);
+                var owner = await _ownerService.GetOwnerByIdAsync(id);
                 if(owner == null)
                 {
                     _logger.LogError($"Owner with id: {id}, hasn't been found in db.");
                     return NotFound();
                 }
         
-                _ownerService.DeleteOwner(owner);
+                await _ownerService.DeleteOwnerAsync(owner);
 
                 return NoContent();
             }

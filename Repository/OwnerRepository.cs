@@ -3,6 +3,7 @@ using Entities.Models;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,31 +16,36 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Owner> GetAllOwners() {
-            return FindAll().OrderBy(ow=>ow.Name).ToList();
+        public async Task<IEnumerable<Owner>> GetAllOwnersAsync() {
+
+            return await FindAll().OrderBy(ow=>ow.Name).ToListAsync();
+
         }
 
-        public Owner GetOwnerById(Guid ownerId) {
-            return FindByCondition(owner=>owner.Id.Equals(ownerId)).FirstOrDefault();
+        public async Task<Owner> GetOwnerByIdAsync(Guid ownerId) {
+            return await FindByCondition(owner=>owner.Id.Equals(ownerId)).FirstOrDefaultAsync();
+        }
+        /*IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        { 
+            return RepositoryContext.Set<T>().Where(expression).AsNoTracking();*/
+
+        public async Task<Owner> GetOwnerWithDetailsAsync(Guid ownerId) {
+            return await FindByCondition(owner=>owner.Id.Equals(ownerId)).Include(ac=>ac.Accounts).FirstOrDefaultAsync();
         }
 
-        public Owner GetOwnerWithDetails(Guid ownerId) {
-            return FindByCondition(owner=>owner.Id.Equals(ownerId)).Include(ac=>ac.Accounts).FirstOrDefault();
-        }
-
-        public void CreateOwner(Owner owner) {
+        public async Task CreateOwnerAsync(Owner owner) {
             Create(owner);
-            RepositoryContext.SaveChanges();
+            await RepositoryContext.SaveChangesAsync();
         }
 
-        public void UpdateOwner(Owner owner) {
+        public async Task UpdateOwnerAsync(Owner owner) {
             Update(owner);
-            RepositoryContext.SaveChanges();
+            await RepositoryContext.SaveChangesAsync();
         }
 
-        public void DeleteOwner(Owner owner) {
+        public async Task DeleteOwnerAsync(Owner owner) {
             Delete(owner);
-            RepositoryContext.SaveChanges();
+            await RepositoryContext.SaveChangesAsync();
         }
 
 
